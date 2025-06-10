@@ -1,4 +1,4 @@
-# # Webscraping Emendas Saúde
+# Webscraping Emendas Saúde
 
 Este projeto tem como objetivo coletar links que contenham a palavra "emenda" na página de execução orçamentária do Senado Federal.
 
@@ -8,6 +8,5 @@ O script `webscraping_emendas_saude.py` acessa a página, faz o scraping dos lin
 
 ## Como usar
 
-- Instale as dependências com:  
-  ```bash
-  pip install requests beautifulsoup4 pandas
+Instale as dependências com:
+
