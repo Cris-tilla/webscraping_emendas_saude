@@ -2,24 +2,24 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 
-# URL da página que será feita a raspagem (exemplo: execução orçamentária do Senado)
-url = "https://www12.senado.leg.br/orcamento/sigabrasil"
-headers = {"User-Agent": "Mozilla/5.0"}
+# URL da execução orçamentária
+url = "https://www12.senado.leg.br/orcamento/execucao/orcamento-2024"
 
-response = requests.get(url, headers=headers)
+# Requisição HTTP
+response = requests.get(url)
+soup = BeautifulSoup(response.text, "html.parser")
 
-if response.status_code == 200:
-    soup = BeautifulSoup(response.content, "html.parser")
+# Coleta de links com "emenda"
+links = soup.find_all("a")
+emendas_links = []
 
-    # Buscar todos os links que contenham a palavra "emenda" no texto
-    links = soup.find_all("a", href=True)
-    data = [
-        {"texto": link.text.strip(), "url": link["href"]}
-        for link in links if "emenda" in link.text.lower()
-    ]
+for link in links:
+    href = link.get("href")
+    if href and "emenda" in href.lower():
+        emendas_links.append(href)
 
-    df = pd.DataFrame(data)
-    df.to_csv("links_emendas.csv", index=False)
-    print("Arquivo links_emendas.csv salvo com sucesso!")
-else:
-    print(f"Erro ao acessar a página: {response.status_code}")
+# Exporta para CSV
+df = pd.DataFrame(emendas_links, columns=["Links com 'emenda'"])
+df.to_csv("links_emendas.csv", index=False)
+
+print("✔ Arquivo links_emendas.csv salvo com sucesso!")
